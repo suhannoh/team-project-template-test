@@ -1,19 +1,44 @@
 package com.yonsai.books;
 
-import com.yonsai.books.controller.BookController;
-import com.yonsai.books.dto.BookAddRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class BooksApplicationTests {
 
-    @Autowired
-    BookController bookController;
+  @Autowired
+  MockMvc mockMvc;
 
-    @Test
-    void contextLoads() {
-    }
+  @Test
+  void 책_추가_컨트롤러_테스트 () throws Exception {
+    //given 테스트 데이터
+    // 자바 15+의 텍스트 블록 문법
+    // String 값만 제대로 된 JSON이면 OK
+    String jsonRequest = """
+        {
+          "category": "소설",
+          "title": "스프링 부트 완벽 가이드 테스트 2",
+          "author": "노수한",
+          "description": "JPA와 스프링 부트를 활용한 책 관리 프로젝트 예제입니다.",
+          "price": 15000,
+          "discount": 20,
+          "pages": 320
+        }
+        """;
 
+    // when && then
+    // json 보내고 응답 코드 확인
+    mockMvc.perform(post("/book/add")
+            .contentType(MediaType.APPLICATION_JSON) // json 데이터를 전달할 때 사용
+            .content(jsonRequest)) // json 테스트 데이터
+            .andExpect(status().isOk()); // 상태값이 200이면 ok
+  }
 }

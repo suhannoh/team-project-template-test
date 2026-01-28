@@ -17,15 +17,15 @@ public record BookAddRequest (
         @NotBlank(message = "설명은 필수 입력값입니다.")
         String description,
 
-        @Size(min = 1000 , message = "가격은 1000원 이상 입력해주세요.")
+        @Min(value = 1000, message = "가격은 1000원 이상 입력해주세요.")
         @NotNull(message = "가격은 필수 입력값입니다.")
         Integer price,
 
-        @Size(max = 100, message = "할인율은 100 이하로 입력해주세요.")
+        @Max(value = 100 , message = "할인율은 100 이하로 입력해주세요.")
         @NotNull(message = "할인율은 필수 입력값입니다.")
         Integer discount,
 
-        @Size(min = 10, message = "페이지는 10 이상 입력해주세요")
+        @Min(value = 10, message = "페이지는 10 이상 입력해주세요")
         @NotNull(message = "페이지는 필수 입력값입니다.")
         Integer pages
 ) {
