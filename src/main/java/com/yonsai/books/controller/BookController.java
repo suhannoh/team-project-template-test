@@ -4,6 +4,7 @@ import com.yonsai.books.dto.BookAddRequest;
 import com.yonsai.books.service.BookAddService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,5 +22,15 @@ public class BookController {
     public ResponseEntity<Void> addBook ( @Valid @RequestBody BookAddRequest request) {
         bookAddService.findOrCreateBook(request);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/test/illegal")
+    public void testException1() {
+        throw new IllegalArgumentException("TEST IllegalArgumentException");
+    }
+
+    @GetMapping("/test/runtime")
+    public void testException2() {
+        throw new RuntimeException("TEST RuntimeException");
     }
 }
