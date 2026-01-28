@@ -3,6 +3,7 @@ package com.yonsai.books.controller;
 import com.yonsai.books.dto.BookAddRequest;
 import com.yonsai.books.service.BookAddService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,28 +12,46 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+
+/**
+ * 도서 관련 API를 처리하는 컨트롤러
+ * 역할 :
+ *  - 도서 관련 CRUD 요청을 받는다
+ *  - 비지니스 로직은 Service로 위임한다.
+ *
+ * @Author 노수한
+ *
+ */
 @RestController
 @RequiredArgsConstructor
 public class BookController {
 
     private final BookAddService bookAddService;
 
-    // 책 추가 메인 메서드
+    /**
+     * 도서 추가 요청 API
+     * 설명 :
+     *  - 도서 정보를 전달받아 기존에 있는지 확인하고 도서를 추가한다
+     * @param
+     *   request {
+     *      category - 카테고리
+     *      title - 제목
+     *      author - 작성자
+     *      description - 설명
+     *      price - 가격
+     *      discount - 할인율
+     *      pages - 페이지 수
+     *      stock - 재고 수량
+     *   }
+     * @return
+     *     200 : 저장 성공
+     *     400 : 사용자 도서 추가시 유효성 검사 실패
+     *     500 : 서버 오류
+     */
     @PostMapping("/book/add")
     public ResponseEntity<Void> addBook ( @Valid @RequestBody BookAddRequest request) {
         bookAddService.findOrCreateBook(request);
         return ResponseEntity.ok().build();
     }
 
-    // IllegalArgumentException 발생
-    @GetMapping("/test/illegal")
-    public void testException1() {
-        throw new IllegalArgumentException("TEST IllegalArgumentException");
-    }
-
-    // RuntimeException 발생
-    @GetMapping("/test/runtime")
-    public void testException2() {
-        throw new RuntimeException("TEST RuntimeException");
-    }
 }

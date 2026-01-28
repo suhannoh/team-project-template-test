@@ -19,18 +19,20 @@ class BooksApplicationTests {
 
   @Test
   void 책_추가_컨트롤러_테스트 () throws Exception {
-    //given 테스트 데이터
+    //given 테스트 데이터..
+
     // 자바 15+의 텍스트 블록 문법
     // String 값만 제대로 된 JSON이면 OK
     String jsonRequest = """
         {
           "category": "소설",
-          "title": "스프링 부트 완벽 가이드 테스트 2",
+          "title": "스프링 부트 완벽 가이드 테스트 44",
           "author": "노수한",
           "description": "JPA와 스프링 부트를 활용한 책 관리 프로젝트 예제입니다.",
           "price": 15000,
           "discount": 20,
-          "pages": 320
+          "pages": 320,
+          "stock": 10
         }
         """;
 

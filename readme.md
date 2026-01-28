@@ -13,7 +13,8 @@
         description: "스프링 부트와 JPA를 활용한 책 관리 프로젝트 예제입니다.",
         price: 15000,
         discount: 20,
-        pages: 320
+        pages: 320,
+        stock: 10
     }
 ##  JS HTTP 요청 테스트 코드 
     예시 
@@ -29,7 +30,8 @@
                 description: "스프링 부트와 JPA를 활용한 책 관리 프로젝트 예제입니다.",
                 price: 15000,
                 discount: 20,
-                pages: 320
+                pages: 320,
+                stock: 10
             })
         })
         .then(res => console.log("status:", res.status))
