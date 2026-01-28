@@ -15,6 +15,26 @@
         discount: 20,
         pages: 320
     }
+## JS 테스트 코드 
+    예시 
+    fetch("http://localhost:8080/book/add", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+                category: "소설",
+                title: "스프링 부트 완벽 가이드",
+                author: "노수한",
+                description: "스프링 부트와 JPA를 활용한 책 관리 프로젝트 예제입니다.",
+                price: 15000,
+                discount: 20,
+                pages: 320
+            })
+        })
+        .then(res => console.log("status:", res.status))
+        .catch(err => console.error(err));
+
 
 ## 테스트 예상 결과 
     Status code 200 : 정상적으로 추가 완료 
