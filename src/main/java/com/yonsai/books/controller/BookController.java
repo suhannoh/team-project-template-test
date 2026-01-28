@@ -1,11 +1,9 @@
 package com.yonsai.books.controller;
 
 import com.yonsai.books.dto.BookAddRequest;
-import com.yonsai.books.service.BookAddService;
+import com.yonsai.books.service.BookService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +24,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class BookController {
 
-    private final BookAddService bookAddService;
+    private final BookService bookService;
 
     /**
      * 도서 추가 요청 API
@@ -50,7 +48,7 @@ public class BookController {
      */
     @PostMapping("/book/add")
     public ResponseEntity<Void> addBook ( @Valid @RequestBody BookAddRequest request) {
-        bookAddService.findOrCreateBook(request);
+        bookService.findOrCreateBook(request);
         return ResponseEntity.ok().build();
     }
 

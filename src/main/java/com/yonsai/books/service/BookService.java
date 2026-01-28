@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class BookAddService {
+public class BookService {
 
     private final BookRepository bookRepository;
 
