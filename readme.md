@@ -20,3 +20,6 @@
 -Aop
 
 -Junit5
+
+## 기본 세팅 
+  AOP BEFORE (Controller , Service) 메서드명 출력
