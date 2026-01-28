@@ -22,8 +22,11 @@
 -Junit5
 
 ## 기본 세팅 
-  AOP BEFORE (Controller , Service) 메서드명 출력
-
+  AOP AROUND (Controller , Service) 시작 ~ 끝 메서드명 출력
+  - ERROR
+    - IllegalArgumentException
+    - RuntimeException
+  - 모두 JSON으로 Message 전달 
 ## 테스트 
     localhost:8080/test -> 현재 시간 전달
 
