@@ -1,17 +1,25 @@
 package com.yonsai.books.controller;
 
+import com.yonsai.books.dto.BookAddRequest;
+import com.yonsai.books.service.BookAddService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import javax.validation.Valid;
 
 @RestController
+@RequiredArgsConstructor
 public class BookController {
 
-    @GetMapping("/test")
-    public ResponseEntity<LocalDateTime> test () {
-        LocalDateTime now = LocalDateTime.now();
-        return ResponseEntity.ok(now);
+    private final BookAddService bookAddService;
+
+
+    @PostMapping("/book/add")
+    public ResponseEntity<Void> addBook ( @Valid @RequestBody BookAddRequest request) {
+        bookAddService.findOrCreateBook(request);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,31 +1,22 @@
-##  프로젝트 프레임워크 템플릿입니다. 
-
-  Spring boot : 2.7.18 
-
-  JDK : 17
-
-  Type : Gradle 
-
-## 추가된 라이브러리
--spring web
-
--spring devTools
-
--spring jpa
-
--mysql (book_db)
-
--thymeleaf
-
--Aop
-
--Junit5
-
-## 기본 세팅 
-  AOP BEFORE (Controller , Service) 메서드명 출력
-
+## feature/add 주요 기능 
+    - 책의 정보를 전달받아 저장한다. 
+    - 이때 이미 동일한 책이 존재하는지 확인한다. 
+    - 중복 확인은 제목 , 저자 , 판매상태를 기준으로 한다. 
+    
 ## 테스트 
-    localhost:8080/test -> 현재 시간 전달
+    [POST] localhost:8080/book/add 
+    예시 
+    Body : {
+        category: "소설",
+        title: "스프링 부트 완벽 가이드",
+        author: "노수한",
+        description: "스프링 부트와 JPA를 활용한 책 관리 프로젝트 예제입니다.",
+        price: 15000,
+        discount: 20,
+        pages: 320
+    }
 
-## 필수 
-    각 feature 브랜치에서 main 땡겨간 후 진행
+## 테스트 예상 결과 
+    Status code 200 : 정상적으로 추가 완료 
+    Status code 500 : 이미 존재하는 책으로 확인되어 저장하지 않음
+
