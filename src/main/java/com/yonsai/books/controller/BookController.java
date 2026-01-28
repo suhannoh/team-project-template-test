@@ -1,4 +1,4 @@
-package com.yonsai.books;
+package com.yonsai.books.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
