@@ -23,3 +23,9 @@
 
 ## 기본 세팅 
   AOP BEFORE (Controller , Service) 메서드명 출력
+
+## 테스트 
+    localhost:8080/test -> 현재 시간 전달
+
+## 필수 
+    각 feature 브랜치에서 main 땡겨간 후 진행
