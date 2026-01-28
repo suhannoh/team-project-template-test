@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @org.aspectj.lang.annotation.Aspect
 @Component
-public class Aspect {
+public class LogAspect {
 
     @Before("execution(* com.yonsai.books.controller..*(..)) || " +
             "execution(* com.yonsai.books.service..*(..))")
