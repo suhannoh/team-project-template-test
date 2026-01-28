@@ -41,4 +41,24 @@ class BooksApplicationTests {
             .content(jsonRequest)) // json 테스트 데이터
             .andExpect(status().isOk()); // 상태값이 200이면 ok
   }
+
+  @Test
+  void DTO_VALID_ERROR () throws Exception {
+    String jsonRequest = """
+        {
+          "category": "",
+          "title": "",
+          "author": "",
+          "description": "",
+          "price": -20000,
+          "discount": 101,
+          "pages": 5
+        }
+        """;
+
+    mockMvc.perform(post("/book/add")
+                    .contentType(MediaType.APPLICATION_JSON) // json 데이터를 전달할 때 사용
+                    .content(jsonRequest)) // json 테스트 데이터
+                    .andExpect(status().is4xxClientError()); // 상태값이 400 error면 ok
+  }
 }
