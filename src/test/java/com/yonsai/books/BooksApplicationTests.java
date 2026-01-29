@@ -6,7 +6,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.nio.charset.StandardCharsets;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,7 +30,7 @@ class BooksApplicationTests {
     String jsonRequest = """
         {
           "category": "소설",
-          "title": "스프링 부트 완벽 가이드 테스트 44",
+          "title": "리액트와 스프링",
           "author": "노수한",
           "description": "JPA와 스프링 부트를 활용한 책 관리 프로젝트 예제입니다.",
           "price": 15000,
@@ -62,5 +66,50 @@ class BooksApplicationTests {
                     .contentType(MediaType.APPLICATION_JSON) // json 데이터를 전달할 때 사용
                     .content(jsonRequest)) // json 테스트 데이터
                     .andExpect(status().is4xxClientError()); // 상태값이 400 error면 ok
+  }
+
+  /**
+   * 도서 번호를 조회하여 데이터를 가져오는 테스트이다
+   *
+   * 중요
+   *  - 이 테스트를 진행 전 책 추가 테스트를 이용하여 임의 데이터를 넣은 뒤 조회를 해야한다
+   */
+  @Test
+  void 도서_번호_조회_컨트롤러_테스트 () throws Exception {
+    long bookId = 1L;
+
+    MvcResult result = mockMvc.perform(get("/book/1"))
+            .andExpect(status().isOk())
+            .andReturn();
+    
+    String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+    System.out.println("JSON 응답 : " + json);
+
+  }
+
+  /**
+   * 도서 검색 키워드를 통한 조회 테스트이다
+   * 키워드를 조합하여 검색가능하며 하나씩 사용하여 검색이 가능하다
+   * @throws Exception
+   */
+  @Test
+  void 도서_통합_조회_컨트롤러_테스트 () throws Exception {
+    String jsonRequest = """
+        {
+          "category": "소설",
+          "author" : "노수한"
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(post("/book/get")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonRequest))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+    System.out.println("JSON 응답 : " + json);
+
+
   }
 }
