@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 도서 추가 서비스
+ * 도서 서비스
  * 역할 :
- *  - 도서 추가 요청을 처리한다
+ *  - 도서에 관련된 모든 비지니스 로직을 처리한다
+ *  - 예외 발생시 모든 예외는 GlobalExceptionHandler에서 처리한다
  *
- * 주의 :
- *  - 이미 존재하는 책이면 예외 발생
  */
 
 @Service
@@ -40,9 +39,22 @@ public class BookService {
     }
 
     /**
-     * 각 키워드에 따른 도서 조회
+     * 각 키워드에 따른 도서 조회하는 메서드
+     *  - 키워드 별 검색 가능
+     *  - 키워드를 묶어 종합 검색 가능 (and 조건)
+     *
+     * 주의
+     *  - 키워드가 하나도 없이 요청하면 400 에러
+     *  - Keyword는 Like문을 사용하여 중간 검색이가능
+     *  - 그 외에 카테고리 작성자는 정확한 검색어를 입력받아야함
+     *  - Status는 Book 객체 SellStatus에 맞게
+     *
      * @param req
      * @return
+     *  List<BookSelectResponse>
+     *
+     * todo - 현재는 List 로 반환하고 있지만 추후에
+     *        목적에 따라 Pageable 사용 예정
      */
     public List<BookSelectResponse> findBySelectKeyword (BookSelectRequest req) {
         validateSelectCondition(req);
@@ -54,22 +66,14 @@ public class BookService {
                 req.status(),
                 req.price()
         );
+
+        // 사용자에게 전달할 DTO 형태로 변환
         return books.stream()
                 .map(BookSelectResponse::create)
                 .toList();
 
     }
 
-    /**
-     *  빈 공백도 null로 변환하는 메서드
-     *    - null 혹은 공백인 상황도 null로 변환하여
-     *    - 쿼리문에서 null 값으로 사용할 수 있게한다
-     * @param v
-     * @return
-     */
-    private String emptyToNull(String v) {
-        return (v == null || v.isBlank()) ? null : v;
-    }
     /**
      *
      * 사용자로부터 받아온 검색 키워드를 검증하는 메서드
@@ -80,20 +84,35 @@ public class BookService {
      * @param req
      */
     private void validateSelectCondition (BookSelectRequest req) {
-        boolean isValid = req.keyword() != null && !req.keyword().isBlank()
-                       || req.author() != null && !req.author().isBlank()
-                       || req.author() != null && !req.category().isBlank()
+        //
+        boolean isValid = isNotnull(req.keyword())
+                       || isNotnull(req.category())
+                       || isNotnull(req.author())
                        || req.price() != null
                        || req.status() != null;
 
         if(!isValid) {
             throw new IllegalArgumentException("검색 조건을 하나 이상 입력해주세요");
         }
-
-        if(!(req.status() == SellStatus.IN_STOCK || req.status() == SellStatus.SOLD_OUT)) {
-            throw new IllegalArgumentException("판매 상태는 SOLD_OUT / IN_STOCK 두 상태로 이루어져있습니다 . 다시 시도해주세요");
-        }
     }
 
+    /**
+     * String 값이 null 혹은 공백인지 알려주는 유틸 메서드
+     * @param s
+     * @return boolean
+     */
+    private boolean isNotnull (String s) {
+        return s != null && !s.isBlank();
+    }
+    /**
+     *  빈 공백도 null로 변환하는 유틸 메서드
+     *    - null 혹은 공백인 상황도 null로 변환하여
+     *    - 쿼리문에서 null 값으로 사용할 수 있게한다
+     * @param v
+     * @return v or Null
+     */
+    private String emptyToNull(String v) {
+        return (v == null || v.isBlank()) ? null : v;
+    }
 
 }

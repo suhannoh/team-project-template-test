@@ -23,6 +23,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
      */
     boolean existsByTitleAndAuthorAndSellStatus(String title, String author, SellStatus sellStatus);
 
+    /**
+     * 도서 ID로 도서를 조회한다
+     * @param bookId
+     * @return Book
+     */
     Optional<Book> findByBookId(Long bookId);
 
 
@@ -39,7 +44,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
      * @param category
      * @param status
      * @param price
-     * @return
+     * @return List<Book>
      */
     @Query("""
     select b from Book b

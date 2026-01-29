@@ -87,19 +87,29 @@ class BooksApplicationTests {
 
   }
 
+  /**
+   * 도서 검색 키워드를 통한 조회 테스트이다
+   * 키워드를 조합하여 검색가능하며 하나씩 사용하여 검색이 가능하다
+   * @throws Exception
+   */
   @Test
   void 도서_통합_조회_컨트롤러_테스트 () throws Exception {
     String jsonRequest = """
         {
           "category": "소설",
+          "author" : "노수한"
         }
         """;
 
-    MvcResult result = mockMvc.perform(post("/book/get/"))
+    MvcResult result = mockMvc.perform(post("/book/get")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonRequest))
             .andExpect(status().isOk())
             .andReturn();
 
     String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
     System.out.println("JSON 응답 : " + json);
+
+
   }
 }
