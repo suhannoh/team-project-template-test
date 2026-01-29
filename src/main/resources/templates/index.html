@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+</head>
+<body>
+
+<div id="auth-area"></div>
+
+<form action="/cart" method="get">
+  <button type="submit">내 장바구니</button>
+</form>
+
+<script>
+  const authArea = document.getElementById('auth-area');
+
+  // 페이지 로드 시 로그인 상태 확인
+  fetch('/me')
+    .then(res => {
+      if (res.ok) {
+        return res.text();
+      }
+      throw new Error('not login');
+    })
+    .then(name => {
+      // 로그인 상태 → 로그아웃 버튼
+      authArea.innerHTML = `
+        <span>${name} 님</span>
+        <button onclick="logout()">로그아웃</button>
+      `;
+    })
+    .catch(() => {
+      // 비로그인 상태 → 로그인 폼
+      authArea.innerHTML = `
+        <form action="/login" method="post">
+          <input name="name" placeholder="이름" required>
+          <button type="submit">로그인</button>
+        </form>
+      `;
+    });
+
+  function logout() {
+    fetch('/logout', { method: 'POST' })
+      .then(() => location.reload());
+  }
+</script>
+
+</body>
+</html>
