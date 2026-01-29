@@ -30,7 +30,7 @@ class BooksApplicationTests {
     String jsonRequest = """
         {
           "category": "소설",
-          "title": "스프링 부트 완벽 가이드 테스트 44",
+          "title": "리액트와 스프링",
           "author": "노수한",
           "description": "JPA와 스프링 부트를 활용한 책 관리 프로젝트 예제입니다.",
           "price": 15000,
@@ -85,5 +85,21 @@ class BooksApplicationTests {
     String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
     System.out.println("JSON 응답 : " + json);
 
+  }
+
+  @Test
+  void 도서_통합_조회_컨트롤러_테스트 () throws Exception {
+    String jsonRequest = """
+        {
+          "category": "소설",
+        }
+        """;
+
+    MvcResult result = mockMvc.perform(post("/book/get/"))
+            .andExpect(status().isOk())
+            .andReturn();
+
+    String json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
+    System.out.println("JSON 응답 : " + json);
   }
 }
