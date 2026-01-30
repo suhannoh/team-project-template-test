@@ -11,20 +11,14 @@ import java.util.Optional;
 public class UserMemoryRepository {
   Map<String , String> memoryUserList = new HashMap<>();
 
-
+  // 저장
   public void save(String sessionId , String name ) {
     memoryUserList.put(sessionId, name);
   }
 
-  public boolean existsBySessionId (String sessionId) {
-    String name = memoryUserList.get(sessionId);
-    return name != null; // 이름이 있는 경우 참 반환
-  }
+  // 세션 ID로 저장된 name 조회
   public Optional<String> findBySessionId (String sessionId) {
     String name = memoryUserList.get(sessionId);
     return Optional.ofNullable(name);
-  }
-  public String getNameBySessionId (String sessionId) {
-    return memoryUserList.get(sessionId);
   }
  }
