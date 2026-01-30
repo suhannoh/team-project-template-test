@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+</head>
+<body>
+
+
+<a id="authBtn" href="/login">로그인</a>
+
+<form action="/cart/add" method="post" style="border: 1px solid black;">
+  <input type="hidden" name="bookId" value="1">
+  <input type="hidden" name="quantity" value="1">
+  <h1> 테스트 데이터 </h1>
+  <h3>책 제목</h3>
+  <p> 무슨무슨책입니다 </p>
+  <p> 15,000원</p>
+  <p> 넘어가는 값 : 책 번호 1 , 수량 1 권 </p>
+  <button type="submit"> 장바구니 담기 </button>
+</form>
+<script>
+  // 세션 상태 확인
+  fetch("/me")
+    .then(res => {
+      if (res.status === 200) {
+        // 상태코드 200이면 로그인 상태
+        const btn = document.getElementById("authBtn");
+        btn.textContent = "로그아웃";
+        btn.href = "/logout";
+      }
+    })
+    .catch(() => {
+      // 아니면 그냥 로그인 버튼으로 유지
+    });
+</script>
+</body>
+</html>

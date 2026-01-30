@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+</head>
+<body>
+<div th:if="${cart == null or #lists.isEmpty(cart.item)}">
+  장바구니가 비어있습니다.
+</div>
+
+<ul th:if="${cart != null and not #lists.isEmpty(cart.item)}">
+  <li th:each="it : ${cart.item}">
+    <span th:text="${it.book.title}">책제목</span>
+    -
+    <span th:text="${it.quantity}">1</span> 권
+  </li>
+</ul>
+</body>
+</html>

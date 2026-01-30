@@ -3,12 +3,12 @@ package com.yonsai.books.dto;
 import javax.validation.constraints.*;
 
 /**
- * 책 추가 요청 DTO
+ * 책 수정 요청 DTO
  *  - @Valid 를 통해 유효성 검사를 진행한다.
  *  - 해당 DTO는 Book 엔티티와 매핑한다.
  * @author 노수한
  */
-public record BookAddRequest(
+public record BookUpdateRequest(
         @NotBlank(message = "카테고리는 필수 입력값입니다.")
         //todo : 카테고리를 enum으로 리스트 생성
         String category,

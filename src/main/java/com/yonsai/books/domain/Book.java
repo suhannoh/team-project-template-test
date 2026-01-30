@@ -1,6 +1,7 @@
 package com.yonsai.books.domain;
 
 import com.yonsai.books.dto.BookAddRequest;
+import com.yonsai.books.dto.BookUpdateRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -82,44 +83,34 @@ public class Book {
                 ", updatedAt=" + updatedAt +
                 '}';
     }
-    /**
-     *  todo :
-     *      이 아래 메서드들은 아직은 사용하지 않지만 미리 생성
-     */
+
 
     /**
-     * 유저가 구매를 할 때 재고를 차감한다.
-     * @param quantity 구매 수량
+     * 객체 수정이 필요할 때 해당 메서드를 불러 수정을 진행한다
+     *  - 수정 요청 DTO 에서 모든 검사를 끝내고 들어와서 값만 바꿔주었음
+     * @param request
      */
-    public void sell(int quantity) {
-        updateStock(this.stock - quantity);
+    public void patch (BookUpdateRequest request) {
+       this.category = request.category();
+       this.title = request.title();
+       this.author = request.author();
+       this.description = request.description();
+       this.price = request.price();
+       this.discount = request.discount();
+       this.pages = request.pages();
+       updateStock(request.stock());
     }
 
-    /**
-     * 판매자가 재고를 추가할 때 재고를 증가한다.
-     * @param quantity 판매 수량
-     */
-    public void addStock (int quantity) {
-        updateStock(this.stock + quantity);
-    }
 
     /**
      * 재고 업데이트
+     *  - 재고에 따라 판매 상태도 변경된다.
+     *  - 판매상태는 직접 바꾸지 않는다
      * @param quantity
      */
     public void updateStock(int quantity) {
         this.stock = quantity;
         // 재고가 0 이하라면 SOLD_OUT 상태로 변경
-        if (this.stock <= 0) {
-            updateSellStatusSoldOut();
-        }
-    }
-    // 재고가 0 이하라면 SOLD_OUT 상태로 변경
-    private void updateSellStatusSoldOut() {
-        this.sellStatus = SellStatus.SOLD_OUT;
-    }
-    // 재고가 0 초과라면 IN_STOCK 상태로 변경
-    public void updateSellStatusInStock() {
-        this.sellStatus = SellStatus.IN_STOCK;
+        this.sellStatus = quantity > 0 ? SellStatus.IN_STOCK : SellStatus.SOLD_OUT;
     }
 }
