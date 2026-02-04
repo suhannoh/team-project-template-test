@@ -52,4 +52,15 @@ public class BookController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * S3 파일 저장 후 Book 저장 요청 API
+     */
+
+    @PostMapping("/s3/book")
+    public ResponseEntity<Void> s3AddBook (@RequestBody BookAddRequest request) {
+        // valid 검증 안 함
+        bookService.findOrCreateBook(request);
+        return ResponseEntity.ok().build();
+    }
+
 }

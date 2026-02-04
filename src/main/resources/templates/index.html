@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+<label>
+  <input id="title" type="text"> 도서명
+</label>
+<br>
+<label>
+  <input id="price" type="text"> 가격
+</label>
+<br>
+<label>
+  <input type="file" id="fileInput">
+</label>
+<br><br>
+<button onclick="upload()"> 저장 </button>
+<h3 id="result"></h3>
+
+
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.1571.0.min.js"></script>
+<script>
+  AWS.config.update({
+          region : "ap-northeast-2"
+      });
+
+  const s3 = new AWS.S3({
+    signatureVersion: "v4"
+  });
+
+  function upload() {
+    const file = document.getElementById('fileInput').files[0];
+    if(!file) {
+      alert("파일을 선택해주세요");
+      return;
+    }
+    // s3 폴더 이름 book + 파일 이름
+    const params = {
+      Bucket: "fullstack-suhan",
+      Key: "Book/" + file.name,
+      Body: file,
+      ContentType: file.type
+    }
+
+    let sucessImageUrl = "";
+    s3.upload(params , (err,data) => {
+      const result = document.getElementById('result');
+
+      if(err) {
+        result.textContent = "Error : " + err.message;
+      } else {
+        result.textContent = "Upload Success : " + data.Location;
+        sucessImageUrl = data.Location;
+        save(sucessImageUrl);
+        clear();
+      }
+    })
+  }
+  const clear = () => {
+    document.getElementById('title').value = "";
+    document.getElementById('price').value = "";
+    document.getElementById('fileInput').value = "";
+  }
+  const save = ( sucessImageUrl) => {
+    const title = document.getElementById('title').value;
+    const price = document.getElementById('price').value;
+
+    // 도서 정보 서버에 저장
+    fetch("http://localhost:8080/s3/book", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      // 임의로 데이터 생성
+      body: JSON.stringify({
+        title,
+        price,
+        category : "book",
+        author : "홍길동",
+        description : "도서 설명입니다.",
+        discount : 0,
+        pages : 100,
+        stock : 50,
+        imageUrl: sucessImageUrl
+      })
+    })
+    // 응답 처리
+    .then(res => {
+      // 상태 코드를 확인하여 오류 처리
+      if (!res.ok) {
+        throw new Error(res.status); // 에러를 던져서 CATCH로 이동
+      }
+      // 응답을 JSON으로 파싱 기다렸다가 다음 THEN으로 이동
+      return res.json();
+    })
+    // 상태 정상 + 파싱 성공
+    .then(data => {
+      console.log("Book saved:", data);
+    })
+    // 오류 처리
+    .catch(err => {
+      console.error("Error saving book:", err);
+    });
+  }
+</script>
+</body>
+</html>

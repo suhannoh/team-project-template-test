@@ -39,6 +39,8 @@ public record BookAddRequest (
 
         @Min(value = 1 , message = "재고는 1개 이상이여야 등록 가능합니다.")
         @NotNull(message = "재고 수량은 필수 입력값입니다.")
-        Integer stock
+        Integer stock,
+
+        String imageUrl
 ) {
 }

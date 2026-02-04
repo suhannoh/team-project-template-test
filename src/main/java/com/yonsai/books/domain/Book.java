@@ -50,6 +50,8 @@ public class Book {
     @Column(name="updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    @Column(name="image_url")
+    private String imageUrl;
 
 
     public Book(BookAddRequest request) {
@@ -63,6 +65,7 @@ public class Book {
         this.sellStatus = SellStatus.IN_STOCK;
         this.stock = request.stock();
         this.createdAt = LocalDateTime.now();
+        this.imageUrl = request.imageUrl();
     }
 
     @Override
@@ -80,12 +83,9 @@ public class Book {
                 ", sellStatus=" + sellStatus +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
-    /**
-     *  todo :
-     *      이 아래 메서드들은 아직은 사용하지 않지만 미리 생성
-     */
 
     /**
      * 유저가 구매를 할 때 재고를 차감한다.
